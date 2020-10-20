@@ -6,6 +6,7 @@ db.persons
         _id: 0,
         name: 1,
         email: 1,
+        //can use this instead birthdate: {$toDate: ""}
         birthdate: { $convert: { input: "$dob.date", to: "date" } },
         age: "$dob.age",
         location: {
@@ -61,5 +62,12 @@ db.persons
         },
       },
     },
+    {
+      $group: {
+        _id: { birthYear: { $isoWeekYear: "$birthdate" } },
+        numPersons: { $sum: 1 },
+      },
+    },
+    { $sort: { numPersons: -1 } },
   ])
   .pretty();
