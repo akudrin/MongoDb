@@ -31,3 +31,23 @@ db.persons
     { $sort: { totalPersons: -1 } },
   ])
   .pretty();
+
+//The following aggregation operation uses the $group stage to count the number of documents in the sales collection
+db.sales.aggregate([
+  {
+    $group: {
+      _id: null,
+      count: { $sum: 1 },
+    },
+  },
+]);
+
+db.movies.aggregate([
+  { $match: { metacritic: { $gt: 0 } } },
+  {
+    $group: {
+      _id: null,
+      averageMetacritic: { $avg: "$metacritic" },
+    },
+  },
+]);
